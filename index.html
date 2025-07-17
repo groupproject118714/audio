@@ -6,85 +6,57 @@
   <title>Audio Control Panel</title>
   <style>
     body {
-      background: #f7f9fc;
       font-family: Arial, sans-serif;
-      text-align: center;
+      background: #f5f5f5;
       padding: 2rem;
+      text-align: center;
     }
-    h1 {
-      color: #333;
-    }
+
     button {
-      margin: 8px;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      background-color: #007bff;
-      color: white;
+      padding: 10px 20px;
+      margin: 10px;
       font-size: 16px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: 0.3s;
     }
+
     button:hover {
-      background-color: #0056b3;
+      background: #0056b3;
+    }
+
+    #audioPlayer {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <h1>🎧 Audio Control Center</h1>
+  <h1>🎵 Audio Control Panel</h1>
 
-  <!-- 13 Audio Buttons -->
-  <div id="buttonsContainer">
-    <!-- Buttons generated via JS -->
-  </div>
+  <!-- 13 Buttons -->
+  <div id="buttonsContainer"></div>
 
-  <!-- Hidden Audio Element -->
-  <audio id="audioPlayer" style="display: none;"></audio>
+  <!-- Hidden Audio Tag -->
+  <audio id="audioPlayer"></audio>
 
-  <!-- Firebase & Control Logic -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+  <script>
+    const audioPlayer = document.getElementById('audioPlayer');
+    const buttonsContainer = document.getElementById('buttonsContainer');
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBBRDtXAMisstSdJB_atcdcpieGU1IhiKw",
-      authDomain: "ai-test-74be7.firebaseapp.com",
-      projectId: "ai-test-74be7",
-      storageBucket: "ai-test-74be7.appspot.com",
-      messagingSenderId: "496360587770",
-      appId: "1:496360587770:web:28408006d5e3bdd9fa2443"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const audioPlayer = document.getElementById("audioPlayer");
-
-    // Create 13 buttons
-    const container = document.getElementById("buttonsContainer");
     for (let i = 1; i <= 13; i++) {
-      const btn = document.createElement("button");
-      btn.innerText = Play Audio ${i};
-      btn.onclick = () => playAudio(i);
-      container.appendChild(btn);
-    }
-
-    // Play audio and update Firebase
-    async function playAudio(number) {
-      const audioUrl = audios/audio${number}.mp3; // Example: audios/audio1.mp3
-      audioPlayer.src = audioUrl;
-      audioPlayer.play();
-
-      // Optional Firebase update
-      const docRef = doc(db, "audioControl", "currentStatus");
-      await updateDoc(docRef, {
-        action: "play",
-        trackUrl: audioUrl,
-        volume: 1,
-        seekTo: 0
-      });
+      const btn = document.createElement('button');
+      btn.textContent = Play Audio ${i};
+      btn.onclick = () => {
+        audioPlayer.src = audio/voice${i}.mp3; // adjust path if needed
+        audioPlayer.play();
+      };
+      buttonsContainer.appendChild(btn);
     }
   </script>
+
 </body>
 </html>
