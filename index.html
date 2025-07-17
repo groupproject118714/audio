@@ -1,12 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Audio Sync Player</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Audio Control Panel</title>
+  <style>
+    body {
+      background: #f7f9fc;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      color: #333;
+    }
+    button {
+      margin: 8px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-  <h1>🎵 Audio Player</h1>
-  <audio id="audioPlayer"></audio>
 
-  <script type="module" src="index.js"></script>
+  <h1>🎧 Audio Control Center</h1>
+
+  <!-- 13 Audio Buttons -->
+  <div id="buttonsContainer">
+    <!-- Buttons generated via JS -->
+  </div>
+
+  <!-- Hidden Audio Element -->
+  <audio id="audioPlayer" style="display: none;"></audio>
+
+  <!-- Firebase & Control Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBRDtXAMisstSdJB_atcdcpieGU1IhiKw",
+      authDomain: "ai-test-74be7.firebaseapp.com",
+      projectId: "ai-test-74be7",
+      storageBucket: "ai-test-74be7.appspot.com",
+      messagingSenderId: "496360587770",
+      appId: "1:496360587770:web:28408006d5e3bdd9fa2443"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const audioPlayer = document.getElementById("audioPlayer");
+
+    // Create 13 buttons
+    const container = document.getElementById("buttonsContainer");
+    for (let i = 1; i <= 13; i++) {
+      const btn = document.createElement("button");
+      btn.innerText = Play Audio ${i};
+      btn.onclick = () => playAudio(i);
+      container.appendChild(btn);
+    }
+
+    // Play audio and update Firebase
+    async function playAudio(number) {
+      const audioUrl = audios/audio${number}.mp3; // Example: audios/audio1.mp3
+      audioPlayer.src = audioUrl;
+      audioPlayer.play();
+
+      // Optional Firebase update
+      const docRef = doc(db, "audioControl", "currentStatus");
+      await updateDoc(docRef, {
+        action: "play",
+        trackUrl: audioUrl,
+        volume: 1,
+        seekTo: 0
+      });
+    }
+  </script>
 </body>
 </html>
